@@ -1,0 +1,16 @@
+{
+    "files.associations": {
+        "*.toml": "yaml",
+        "Gopkg.lock": "yaml",
+        "iosfwd": "cpp",
+        "__functional_base": "cpp",
+        "array": "cpp",
+        "istream": "cpp",
+        "locale": "cpp",
+        "memory": "cpp",
+        "tuple": "cpp",
+        "utility": "cpp",
+        "*.tcc": "cpp",
+        "functional": "cpp"
+    }
+}
