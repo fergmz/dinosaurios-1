@@ -25,8 +25,7 @@ void HashMapConcurrente::incrementar(std::string clave) {
     pthread_mutex_lock(&mutexTabla[index]);
     int indiceLista = buscarIndice(clave);
     if (indiceLista != -1) {
-        hashMapPair valor = tabla[index]->iesimo(indiceLista);
-        valor.second++;
+        tabla[index]->iesimo(indiceLista).second += 1;
     } else {
         hashMapPair valor = std::make_pair(clave, 1);
         tabla[index]->insertar(valor);
