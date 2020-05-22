@@ -85,8 +85,7 @@ unsigned int HashMapConcurrente::valor(string clave) {
 }
 
 hashMapPair HashMapConcurrente::maximo() {
-    hashMapPair *max = new hashMapPair();
-    max->second = 0;
+    hashMapPair max = hashMapPair("", 0);
 
     for (unsigned int index = 0; index < HashMapConcurrente::cantLetras; index++) {
         pthread_mutex_lock(&mutexTabla[index]); 
@@ -94,9 +93,9 @@ hashMapPair HashMapConcurrente::maximo() {
 
     for (unsigned int index = 0; index < HashMapConcurrente::cantLetras; index++) {
         for (auto it = tabla[index]->crearIt(); it.haySiguiente(); it.avanzar()) {
-            if (it.siguiente().second > max->second) {
-                max->first = it.siguiente().first;
-                max->second = it.siguiente().second;
+            if (it.siguiente().second > max.second) {
+                max.first = it.siguiente().first;
+                max.second = it.siguiente().second;
             }
         }
     }
@@ -105,12 +104,13 @@ hashMapPair HashMapConcurrente::maximo() {
         pthread_mutex_unlock(&mutexTabla[index]);
     }
 
-    return *max;
+    return max;
 }
 
 struct ThreadMaximoData {
     ListaAtomica<hashMapPair>* *tabla;
-    atomic<hashMapPair*> *maximo;
+    pthread_mutex_t *mutexMaximo;
+    hashMapPair *maximo;
     atomic_flag *filasProcesadas;
     unsigned int cantFilas;
 };
@@ -121,24 +121,21 @@ void *threadMaximo(void *args) {
     for (unsigned int index = 0; index < params.cantFilas; index++) {
         if (!params.filasProcesadas[index].test_and_set()) {
 
-            hashMapPair* maximoFila = new hashMapPair("", 0);
+            hashMapPair maximoFila = hashMapPair("", 0);
 
             for (auto it = params.tabla[index]->crearIt(); it.haySiguiente(); it.avanzar()) {
-                if (it.siguiente().second > maximoFila->second) {
-                    maximoFila->first = it.siguiente().first;
-                    maximoFila->second = it.siguiente().second;
+                if (it.siguiente().second > maximoFila.second) {
+                    maximoFila.first = it.siguiente().first;
+                    maximoFila.second = it.siguiente().second;
                 }
             }
 
-            while (true) {
-                hashMapPair* maximoActual = params.maximo->load();
-                if (maximoFila->second > maximoActual->second && params.maximo->compare_exchange_strong(maximoActual, maximoFila)) {
-                    break;
-                }
-                if (maximoFila->second <= maximoActual->second) {
-                    break;
-                }
+            pthread_mutex_lock(params.mutexMaximo);
+            if (maximoFila.second > params.maximo->second) {
+                params.maximo->first = maximoFila.first;
+                params.maximo->second = maximoFila.second;
             }
+            pthread_mutex_unlock(params.mutexMaximo);
         }
     }
 
@@ -147,11 +144,9 @@ void *threadMaximo(void *args) {
 
 hashMapPair HashMapConcurrente::maximoParalelo(unsigned int cantThreads) {
     // Completar (Ejercicio 3)
-    atomic<hashMapPair*> maximo;
-    maximo.store(new hashMapPair("", 0));
-
+    hashMapPair maximo = hashMapPair("", 0);
     atomic_flag filasProcesadas[cantLetras] = {ATOMIC_FLAG_INIT};
-
+    pthread_mutex_t mutexMaximo = PTHREAD_MUTEX_INITIALIZER;
     pthread_t threads[cantThreads];
     ThreadMaximoData threadData[cantThreads];
    
@@ -162,6 +157,7 @@ hashMapPair HashMapConcurrente::maximoParalelo(unsigned int cantThreads) {
     for (unsigned int index = 0; index < cantThreads; index++) {
         threadData[index].tabla = tabla;
         threadData[index].maximo = &maximo;
+        threadData[index].mutexMaximo = &mutexMaximo;
         threadData[index].filasProcesadas = filasProcesadas;
         threadData[index].cantFilas = cantLetras;
 
@@ -176,8 +172,7 @@ hashMapPair HashMapConcurrente::maximoParalelo(unsigned int cantThreads) {
         pthread_mutex_unlock(&mutexTabla[index]);
     }
 
-    hashMapPair* maxValue = maximo.load();
-    return hashMapPair(maxValue->first, maxValue->second);
+    return maximo;
 }
 
 #endif
