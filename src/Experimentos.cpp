@@ -25,9 +25,11 @@ int main() {
     filePaths.push_back("data/set-7");
     filePaths.push_back("data/set-8");
     filePaths.push_back("data/set-9");
+    filePaths.push_back("data/set-10");
 
-    for (int i = 0; i < 100; i += 5) {
-        double time = loadFilesTime(filePaths, 100);
+
+    for (int i = 1; i <= 20; i++) {
+        double time = loadFilesTime(filePaths, i);
         printf("Escenario 1 con %d threads: %lf\n", i, time);
     }
     
@@ -54,7 +56,7 @@ double loadFilesTime(vector<string> filePaths, int cantThreads) {
             exit(EXIT_FAILURE);
         }
 
-        double accum = (stop.tv_sec - start.tv_sec) * 1000 + (stop.tv_nsec - start.tv_nsec) / 1000000;
+        double accum = (stop.tv_sec - start.tv_sec) * 1000000000 + (stop.tv_nsec - start.tv_nsec);
         if (accum < minTime) {
             minTime = accum;
         }   
