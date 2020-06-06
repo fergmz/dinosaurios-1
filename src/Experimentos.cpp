@@ -15,20 +15,20 @@ int main() {
     // Escenario 1 - Carga de archivos
     // Mismo archivo multiples veces y vamos aumentando la cantidad de threads
     vector<string> filePaths = vector<string>();
-    filePaths.push_back("data/set-0");
-    filePaths.push_back("data/set-1");
-    filePaths.push_back("data/set-2");
-    filePaths.push_back("data/set-3");
-    filePaths.push_back("data/set-4");
-    filePaths.push_back("data/set-5");
-    filePaths.push_back("data/set-6");
-    filePaths.push_back("data/set-7");
-    filePaths.push_back("data/set-8");
-    filePaths.push_back("data/set-9");
-    filePaths.push_back("data/set-10");
+    filePaths.push_back("data/xaa");
+    filePaths.push_back("data/xab");
+    /*filePaths.push_back("data/xac");
+    filePaths.push_back("data/xad");
+    filePaths.push_back("data/xae");
+    filePaths.push_back("data/xaf");
+    filePaths.push_back("data/xag");
+    filePaths.push_back("data/xah");
+    filePaths.push_back("data/xai");
+    filePaths.push_back("data/xaj");
+    filePaths.push_back("data/xak");*/
 
 
-    for (int i = 1; i <= 20; i++) {
+    for (int i = 1; i <= filePaths.size(); i++) {
         double time = loadFilesTime(filePaths, i);
         printf("Escenario 1 con %d threads: %lf\n", i, time);
     }
@@ -56,7 +56,7 @@ double loadFilesTime(vector<string> filePaths, int cantThreads) {
             exit(EXIT_FAILURE);
         }
 
-        double accum = (stop.tv_sec - start.tv_sec) * 1000000000 + (stop.tv_nsec - start.tv_nsec);
+        double accum = (double)(stop.tv_sec - start.tv_sec) * (double)1000 + (double)(stop.tv_nsec - start.tv_nsec) / 1000000;
         if (accum < minTime) {
             minTime = accum;
         }   
