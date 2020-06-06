@@ -13,8 +13,28 @@ double maximoParaleloTime(vector<string> filePaths, int cantThreads);
 
 int main() {
 
-    // Escenario 1 - Carga de archivos
-    // Mismo archivo multiples veces y vamos aumentando la cantidad de threads
+    // Escenario 1 - Archivos de 1000 lineas
+    // Multiples archivos y vamos aumentando la cantidad de threads
+    vector<string> filePaths = vector<string>();
+    filePaths.push_back("data/set-0");
+    filePaths.push_back("data/set-1");
+    filePaths.push_back("data/set-2");
+    filePaths.push_back("data/set-3");
+    filePaths.push_back("data/set-4");
+    filePaths.push_back("data/set-5");
+    filePaths.push_back("data/set-6");
+    filePaths.push_back("data/set-7");
+    filePaths.push_back("data/set-8");
+    filePaths.push_back("data/set-9");
+    filePaths.push_back("data/set-10");
+
+    for (int i = 1; i <= filePaths.size() * 2; i++) {
+        double time = loadFilesTime(filePaths, i);
+        printf("%lf\n", time);
+    }
+
+    // Escenario 1 - Archivos de 3700 lineas
+    // Multiples archivos y vamos aumentando la cantidad de threads
     vector<string> filePaths = vector<string>();
     filePaths.push_back("data/wet-0");
     filePaths.push_back("data/wet-1");
@@ -28,18 +48,35 @@ int main() {
     filePaths.push_back("data/wet-9");
     filePaths.push_back("data/wet-10");
 
-    /*for (int i = 1; i <= filePaths.size() * 2; i++) {
+    for (int i = 1; i <= filePaths.size() * 2; i++) {
         double time = loadFilesTime(filePaths, i);
-        printf("Escenario 1 con %d threads: %lf\n", i, time);
-    }*/
+        printf("%lf\n", time);
+    }
 
+    vector<string> filePaths = vector<string>();
+    filePaths.push_back("data/xaa");
+    filePaths.push_back("data/xab");
+    filePaths.push_back("data/xac");
+    filePaths.push_back("data/xad");
+    filePaths.push_back("data/xae");
+    filePaths.push_back("data/xaf");
+    filePaths.push_back("data/xag");
+    filePaths.push_back("data/xah");
+    filePaths.push_back("data/xai");
+    filePaths.push_back("data/xaj");
+    filePaths.push_back("data/xak");
+
+    for (int i = 1; i <= filePaths.size() * 2; i++) {
+        double time = loadFilesTime(filePaths, i);
+        printf("%lf\n", time);
+    }
 
     // Escenario 2 - Calculo de valor Maximo en paralelo
-    /*int cantThreads = 50;
+    int cantThreads = 50;
     for (int i = 1; i <= cantThreads; i++) {
         double time = maximoParaleloTime(filePaths, i);
         printf("%lf\n", time);
-    }*/
+    }
 
     return(EXIT_SUCCESS);
 }
