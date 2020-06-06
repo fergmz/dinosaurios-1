@@ -15,20 +15,16 @@ int main() {
     // Escenario 1 - Carga de archivos
     // Mismo archivo multiples veces y vamos aumentando la cantidad de threads
     vector<string> filePaths = vector<string>();
-    filePaths.push_back("data/corpus");
-    filePaths.push_back("data/corpus");
-    filePaths.push_back("data/corpus");
-    filePaths.push_back("data/corpus");
-    filePaths.push_back("data/corpus");
-    filePaths.push_back("data/corpus");
-    filePaths.push_back("data/corpus");
-    filePaths.push_back("data/corpus");
-    filePaths.push_back("data/corpus");
-    filePaths.push_back("data/corpus");
-    filePaths.push_back("data/corpus");
-    filePaths.push_back("data/corpus");
-    filePaths.push_back("data/corpus");
-    filePaths.push_back("data/corpus");
+    filePaths.push_back("data/set-0");
+    filePaths.push_back("data/set-1");
+    filePaths.push_back("data/set-2");
+    filePaths.push_back("data/set-3");
+    filePaths.push_back("data/set-4");
+    filePaths.push_back("data/set-5");
+    filePaths.push_back("data/set-6");
+    filePaths.push_back("data/set-7");
+    filePaths.push_back("data/set-8");
+    filePaths.push_back("data/set-9");
 
     for (int i = 0; i < 100; i += 5) {
         double time = loadFilesTime(filePaths, 100);
