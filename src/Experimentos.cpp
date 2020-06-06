@@ -53,6 +53,8 @@ int main() {
         printf("%lf\n", time);
     }
 
+    // Escenario 1 - Archivos de 7500 lineas
+    // Multiples archivos y vamos aumentando la cantidad de threads
     vector<string> filePaths = vector<string>();
     filePaths.push_back("data/xaa");
     filePaths.push_back("data/xab");
