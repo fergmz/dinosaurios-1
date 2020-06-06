@@ -56,14 +56,12 @@ vector<string> HashMapConcurrente::claves() {
     vector<string> claves;
 
     for (int index = 0; index < cantLetras; index++) {
-        pthread_mutex_lock(&mutexTabla[index]);
         ListaAtomica<hashMapPair>::Iterador it = tabla[index]->crearIt();
         while(it.haySiguiente()) {
             hashMapPair valor = it.siguiente();
             claves.push_back(valor.first);
             it.avanzar();
         }
-        pthread_mutex_unlock(&mutexTabla[index]);
     }
 
     return claves;
@@ -74,12 +72,10 @@ unsigned int HashMapConcurrente::valor(string clave) {
     unsigned int result = 0;
     unsigned int index = hashIndex(clave);
 
-    pthread_mutex_lock(&mutexTabla[index]);
     int listaIndex = buscarIndice(clave);
     if (listaIndex != -1) {
         result = tabla[index]->iesimo(listaIndex).second;
     }
-    pthread_mutex_unlock(&mutexTabla[index]);
 
     return result;
 }
