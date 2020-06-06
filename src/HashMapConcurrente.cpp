@@ -55,7 +55,11 @@ vector<string> HashMapConcurrente::claves() {
     // Completar (Ejercicio 2)
     vector<string> claves;
 
-    for (int index = 0; index < cantLetras; index++) {
+    for (unsigned int index = 0; index < HashMapConcurrente::cantLetras; index++) {
+        pthread_mutex_lock(&mutexTabla[index]); 
+    }
+
+    for (int index = 0; index < HashMapConcurrente::cantLetras; index++) {
         ListaAtomica<hashMapPair>::Iterador it = tabla[index]->crearIt();
         while(it.haySiguiente()) {
             hashMapPair valor = it.siguiente();
@@ -64,20 +68,27 @@ vector<string> HashMapConcurrente::claves() {
         }
     }
 
+    for (unsigned int index = 0; index < HashMapConcurrente::cantLetras; index++) {
+        pthread_mutex_unlock(&mutexTabla[index]);
+    }
+
     return claves;
 }
 
 unsigned int HashMapConcurrente::valor(string clave) {
     // Completar (Ejercicio 2)
-    unsigned int result = 0;
     unsigned int index = hashIndex(clave);
 
-    int listaIndex = buscarIndice(clave);
-    if (listaIndex != -1) {
-        result = tabla[index]->iesimo(listaIndex).second;
+    ListaAtomica<hashMapPair>::Iterador it = tabla[index]->crearIt();
+    while(it.haySiguiente()) {
+        hashMapPair valor = it.siguiente();
+        if (valor.first == clave) {
+            return valor.second;
+        }
+        it.avanzar();
     }
 
-    return result;
+    return 0;
 }
 
 hashMapPair HashMapConcurrente::maximo() {
