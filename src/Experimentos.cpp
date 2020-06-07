@@ -12,7 +12,7 @@ double loadFilesTime(vector<string> filePaths, int cantThreads);
 double maximoParaleloTime(vector<string> filePaths, int cantThreads);
 
 int main() {
-    
+
     // Escenario 1 - Caso 1 - Archivos de 1000 lineas
     // Multiples archivos y vamos aumentando la cantidad de threads
     vector<string> filePaths1 = vector<string>();
@@ -53,7 +53,7 @@ int main() {
         printf("%lf\n", time);
     }
 
-    // Escenario 1 - Archivos de 7500 lineas
+    // Escenario 1 - Caso 3 - Archivos de 7500 lineas
     // Multiples archivos y vamos aumentando la cantidad de threads
     vector<string> filePaths3 = vector<string>();
     filePaths3.push_back("data/3/xaa");
@@ -80,7 +80,7 @@ int main() {
         printf("%lf\n", time);
     }
 
-    // Escenario 3 - 
+    // Escenario 1 - Set con 100 archivos de 100 palabras
     vector<string> filePaths4 = vector<string>();
     filePaths4.push_back("data/4/set-0aa");
     filePaths4.push_back("data/4/set-0ab");
